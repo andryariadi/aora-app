@@ -14,7 +14,7 @@ const FormField = ({ title, value, handleChangeInput, otherStyles, keyboardType,
 
         {title === "Email" && (
           <TouchableOpacity>
-            <Image source={icons.eye} className="bg-rose-500 w-6 h-6" resizeMode="contain" />
+            <Image source={icons.email} className="w-5 h-5 text-slate-500" resizeMode="contain" />
           </TouchableOpacity>
         )}
 
