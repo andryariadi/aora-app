@@ -5,6 +5,7 @@ import FormField from "../../components/FormField";
 import { useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import { Link } from "expo-router";
+import { createUser } from "../../libs/appwrite";
 
 const SignUp = () => {
   const [formInput, setFormInput] = useState({
@@ -15,7 +16,9 @@ const SignUp = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    createUser();
+  };
 
   return (
     <SafeAreaView className="bg-primary h-full">
