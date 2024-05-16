@@ -24,7 +24,7 @@ const Home = () => {
               </View>
             </View>
 
-            <SearchInput />
+            <SearchInput keyboardType="Search..." />
           </View>
         )}
       />
