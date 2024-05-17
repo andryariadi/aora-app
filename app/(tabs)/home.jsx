@@ -1,12 +1,21 @@
-import { View, Text, FlatList, Image } from "react-native";
+import { View, Text, FlatList, Image, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../constants";
 import SearchInput from "../../components/SearchInput";
 import TrendingVideo from "../../components/TrendingVideo";
+import EmptyState from "../../components/EmptyState";
+import { useState } from "react";
 
 const Home = () => {
+  const [refreshing, setreFreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setreFreshing(true);
+    setreFreshing(false);
+  };
+
   return (
-    <SafeAreaView className="bg-primary">
+    <SafeAreaView className="bg-primary h-full">
       <FlatList //alasan pake flatlist karena scrollview tidak bisa menggunakan scroll secara horizontal dan vertikal secara bersamaan
         // className="bg-blue-600 h-full"
         data={[{ id: 1 }, { id: 2 }, { id: 3 }]}
@@ -34,7 +43,8 @@ const Home = () => {
             </View>
           </View>
         )}
-        ListEmptyComponent={() => <Text className="text-3xl text-white">Empty</Text>}
+        ListEmptyComponent={() => <EmptyState title="No Videos Found" subtitle="Be the first to upload a video" />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
     </SafeAreaView>
   );
