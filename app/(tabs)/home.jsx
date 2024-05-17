@@ -2,11 +2,12 @@ import { View, Text, FlatList, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../constants";
 import SearchInput from "../../components/SearchInput";
+import TrendingVideo from "../../components/TrendingVideo";
 
 const Home = () => {
   return (
     <SafeAreaView className="bg-primary">
-      <FlatList
+      <FlatList //alasan pake flatlist karena scrollview tidak bisa menggunakan scroll secara horizontal dan vertikal secara bersamaan
         // className="bg-blue-600 h-full"
         data={[{ id: 1 }, { id: 2 }, { id: 3 }]}
         keyExtractor={(item) => item.$id}
@@ -24,9 +25,16 @@ const Home = () => {
               </View>
             </View>
 
-            <SearchInput keyboardType="Search..." />
+            <SearchInput keyboardType="Search for a video topic" />
+
+            <View className="bg-indigo-700 flex-1 pt-5 pb-8">
+              <Text className="text-gray-100 text-lg font-pregular mb-3">Latest Videos</Text>
+
+              <TrendingVideo posts={[{ id: 1 }, { id: 2 }, { id: 3 }] ?? []} />
+            </View>
           </View>
         )}
+        ListEmptyComponent={() => <Text className="text-3xl text-white">Empty</Text>}
       />
     </SafeAreaView>
   );
