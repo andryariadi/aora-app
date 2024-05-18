@@ -7,6 +7,7 @@ import EmptyState from "../../components/EmptyState";
 import { useState } from "react";
 import useAppwrite from "../../libs/useAppwrite";
 import { getAllPosts } from "../../libs/appwrite";
+import VideoCard from "../../components/VideoCard";
 
 const Home = () => {
   const { data: posts, refetch } = useAppwrite(getAllPosts);
@@ -25,7 +26,7 @@ const Home = () => {
         // className="bg-blue-600 h-full"
         data={posts}
         keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => <Text className="bg-amber-500 text-3xl text-white">{item.title}</Text>}
+        renderItem={({ item }) => <VideoCard video={item} />}
         ListHeaderComponent={() => (
           <View className="bg-rose-500 my-6 px-4 space-y-6">
             <View className="bg-gray-200 flex-row justify-between items-center mb-6">
