@@ -92,7 +92,7 @@ export const getAllPosts = async () => {
 
 export const getLatesPosts = async () => {
   try {
-    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.videoCollectionId, [Query.orderDesc("createdAt", Query.limit(7))]);
+    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.videoCollectionId, [Query.orderDesc("$createdAt", Query.limit(7))]);
 
     return posts.documents;
   } catch (error) {

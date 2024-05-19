@@ -6,11 +6,12 @@ import TrendingVideo from "../../components/TrendingVideo";
 import EmptyState from "../../components/EmptyState";
 import { useState } from "react";
 import useAppwrite from "../../libs/useAppwrite";
-import { getAllPosts } from "../../libs/appwrite";
+import { getAllPosts, getLatesPosts } from "../../libs/appwrite";
 import VideoCard from "../../components/VideoCard";
 
 const Home = () => {
   const { data: posts, refetch } = useAppwrite(getAllPosts);
+  const { data: latesPosts } = useAppwrite(getLatesPosts);
   const [refreshing, setreFreshing] = useState(false);
 
   const onRefresh = async () => {
@@ -19,7 +20,7 @@ const Home = () => {
     setreFreshing(false);
   };
 
-  console.log(posts, "<----dihome");
+  // console.log(latesPosts, "<----dihome");
   return (
     <SafeAreaView className="bg-primary h-full">
       <FlatList //alasan pake flatlist karena scrollview tidak bisa menggunakan scroll secara horizontal dan vertikal secara bersamaan
@@ -45,7 +46,7 @@ const Home = () => {
             <View className="bg-indigo-700 flex-1 pt-5 pb-8">
               <Text className="text-gray-100 text-lg font-pregular mb-3">Latest Videos</Text>
 
-              <TrendingVideo posts={[{ id: 1 }, { id: 2 }, { id: 3 }] ?? []} />
+              <TrendingVideo posts={latesPosts ?? []} />
             </View>
           </View>
         )}
