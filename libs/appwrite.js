@@ -92,7 +92,18 @@ export const getAllPosts = async () => {
 
 export const getLatesPosts = async () => {
   try {
-    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.videoCollectionId, [Query.orderDesc("$createdAt", Query.limit(7))]);
+    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.videoCollectionId, [Query.orderDesc("$createdAt"), Query.limit(7)]);
+
+    return posts.documents;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+export const searchPosts = async (query) => {
+  try {
+    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.videoCollectionId, [Query.search("title", query)]);
 
     return posts.documents;
   } catch (error) {

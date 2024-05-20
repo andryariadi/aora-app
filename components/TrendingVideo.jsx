@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, FlatList, TouchableOpacity, ImageBackground, Image } from "react-native";
+import { FlatList, TouchableOpacity, ImageBackground, Image } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { icons } from "../constants";
 import { ResizeMode, Video } from "expo-av";
@@ -24,7 +24,7 @@ const zoomOut = {
 const TrendingItem = ({ item, activeItem }) => {
   const [play, setPlay] = useState(false);
 
-  console.log(activeItem, item.$id, item, "<----ditrending");
+  // console.log(activeItem, item.$id, "<----ditrending");
   return (
     <Animatable.View className="bg-teal-600 mr-5" animation={activeItem === item.$id ? zoomIn : zoomOut} duration={500}>
       {play ? (
@@ -64,9 +64,10 @@ const TrendingVideo = ({ posts }) => {
       keyExtractor={(item) => item.$id}
       renderItem={({ item }) => <TrendingItem activeItem={activeItem} item={item} />}
       horizontal
-      showsHorizontalScrollIndicator={true}
       onViewableItemsChanged={viewableItemsChanged}
-      viewabilityConfig={{ itemVisiblePercentThreshold: 70 }}
+      viewabilityConfig={{
+        itemVisiblePercentThreshold: 70,
+      }}
       contentOffset={{ x: 135 }}
     />
   );
