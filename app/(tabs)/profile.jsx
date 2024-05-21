@@ -32,7 +32,13 @@ const Profile = () => {
               <Image source={{ uri: user?.avatar }} className="w-[90%] h-[90%] rounded-lg" resizeMode="cover" />
             </View>
 
-            <InfoBox />
+            <InfoBox title={user?.username} containerStyles="mt-3" titleStyles="text-lg" />
+
+            <View className="mt-5 flex-row">
+              <InfoBox title={posts?.length || 0} subTitle="Posts" containerStyles="mr-10" titleStyles="text-xl" />
+
+              <InfoBox title="1.2k" subTitle="Followers" titleStyles="text-xl" />
+            </View>
           </View>
         )}
         ListEmptyComponent={() => <EmptyState title="No Videos Found" subtitle="No Videos Found with that query!" />}
