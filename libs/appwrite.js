@@ -47,18 +47,20 @@ export async function createUser(email, password, username) {
 
 export const signIn = async (email, password) => {
   try {
-    // Periksa apakah ada sesi yang aktif
-    const activeSession = await account.get();
-
-    if (activeSession) {
-      // Jika ada sesi yang aktif, kembalikan sesi tersebut
-      return activeSession;
-    } else {
-      // Jika tidak ada sesi yang aktif, lanjutkan dengan membuat sesi baru
-      const session = await account.createEmailPasswordSession(email, password);
-      return session;
-    }
+    const session = await account.createEmailPasswordSession(email, password);
+    return session;
   } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const signOut = async () => {
+  try {
+    const session = await account.deleteSession("current");
+
+    return session;
+  } catch (error) {
+    // console.log(error);
     throw new Error(error);
   }
 };

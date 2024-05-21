@@ -8,8 +8,11 @@ import { useState } from "react";
 import useAppwrite from "../../libs/useAppwrite";
 import { getAllPosts, getLatesPosts } from "../../libs/appwrite";
 import VideoCard from "../../components/VideoCard";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const Home = () => {
+  const { user, setUser, setIsLoggedIn } = useGlobalContext();
+
   const { data: posts, refetch } = useAppwrite(getAllPosts);
   const { data: latesPosts } = useAppwrite(getLatesPosts);
 
@@ -34,7 +37,7 @@ const Home = () => {
             <View className="bg-gray-200 flex-row justify-between items-center mb-6">
               <View className="bg-lime-500">
                 <Text className="font-pmedium text-sm text-gray-100">Welcome Back</Text>
-                <Text className="text-2xl text-white font-psemibold">Andry Ariadi</Text>
+                <Text className="text-2xl text-white font-psemibold">{user?.username}</Text>
               </View>
 
               <View>

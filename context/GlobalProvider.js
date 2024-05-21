@@ -27,6 +27,8 @@ const GlobalProvider = ({ children }) => {
       .finally(() => setIsLoading(false));
   }, []);
 
+  console.log(user, "<----diglobalprovider");
+
   return (
     <GlobalContext.Provider
       value={{
