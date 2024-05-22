@@ -1,10 +1,12 @@
-import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../../components/FormField";
 import { useState } from "react";
 import { ResizeMode, Video } from "expo-av";
 import { icons } from "../../constants";
 import CustomButton from "../../components/CustomButton";
+import * as DucumentPicker from "expo-document-picker";
+import { router } from "expo-router";
 
 const Create = () => {
   const [uploading, setUploading] = useState(false);
@@ -16,7 +18,51 @@ const Create = () => {
     prompt: "",
   });
 
-  const submit = () => {};
+  const openPicker = async (selectType) => {
+    const result = await DucumentPicker.getDocumentAsync({
+      types: selectType === "image" ? ["image/png", "image/jpg"] : ["video/mp4, video/gif"],
+    });
+
+    if (!result.canceled) {
+      if (selectType === "image") {
+        setInputForm({ ...inputForm, thumnail: result.assets[0] });
+      }
+
+      if (selectType === "video") {
+        setInputForm({ ...inputForm, video: result.assets[0] });
+      }
+    } else {
+      setTimeout(() => {
+        Alert.alert("Document picked", JSON.stringify(result, null, 2));
+      }, 100);
+    }
+  };
+
+  const submit = () => {
+    if (!inputForm.title || !inputForm.prompt || !inputForm.thumnail || !inputForm.video) {
+      return Alert.alert("Error", "Please fill in all the fields!");
+    }
+
+    setUploading(true);
+
+    try {
+      Alert.alert("Success", "Video uploaded successfully!");
+
+      router.push("/home");
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", error.message);
+    } finally {
+      setInputForm({
+        title: "",
+        thumnail: null,
+        video: null,
+        prompt: "",
+      });
+
+      setUploading(false);
+    }
+  };
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -28,7 +74,7 @@ const Create = () => {
         <View className="mt-7 space-y-2">
           <Text className="text-base text-gray-100 font-pmedium">Upload Video</Text>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => openPicker("video")}>
             {inputForm.video ? (
               <Video source={{ uri: inputForm.video.uri }} useNativeControls resizeMode={ResizeMode.COVER} isLooping className="bg-teal-500 w-full h-64 rounded-2xl" />
             ) : (
@@ -44,7 +90,7 @@ const Create = () => {
         <View className="mt-7 space-y-2">
           <Text className="text-base text-gray-100 font-pmedium">Thumbnail Image</Text>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => openPicker("image")}>
             {inputForm.thumnail ? (
               <Image source={{ uri: inputForm.thumnail.uri }} resizeMode="cover" className="bg-amber-500 w-full h-64 rounded-2xl" />
             ) : (
