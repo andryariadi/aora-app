@@ -5,10 +5,14 @@ import { useState } from "react";
 import { ResizeMode, Video } from "expo-av";
 import { icons } from "../../constants";
 import CustomButton from "../../components/CustomButton";
-import * as DucumentPicker from "expo-document-picker";
+// import * as DucumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
+import { createVideo } from "../../libs/appwrite";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const Create = () => {
+  const { user } = useGlobalContext();
   const [uploading, setUploading] = useState(false);
 
   const [inputForm, setInputForm] = useState({
@@ -19,8 +23,15 @@ const Create = () => {
   });
 
   const openPicker = async (selectType) => {
-    const result = await DucumentPicker.getDocumentAsync({
-      types: selectType === "image" ? ["image/png", "image/jpg"] : ["video/mp4, video/gif"],
+    //if you used documentpicker
+    // const result = await DucumentPicker.getDocumentAsync({
+    //   types: selectType === "image" ? ["image/png", "image/jpg", "image/jpeg"] : ["video/mp4, video/gif"],
+    // });
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: selectType === "image" ? ImagePicker.MediaTypeOptions.Images : ImagePicker.MediaTypeOptions.Videos,
+      aspect: [4, 3],
+      quality: 1,
     });
 
     if (!result.canceled) {
@@ -31,14 +42,10 @@ const Create = () => {
       if (selectType === "video") {
         setInputForm({ ...inputForm, video: result.assets[0] });
       }
-    } else {
-      setTimeout(() => {
-        Alert.alert("Document picked", JSON.stringify(result, null, 2));
-      }, 100);
     }
   };
 
-  const submit = () => {
+  const submit = async () => {
     if (!inputForm.title || !inputForm.prompt || !inputForm.thumnail || !inputForm.video) {
       return Alert.alert("Error", "Please fill in all the fields!");
     }
@@ -47,6 +54,11 @@ const Create = () => {
 
     try {
       Alert.alert("Success", "Video uploaded successfully!");
+
+      await createVideo({
+        ...inputForm,
+        userId: user.$id,
+      });
 
       router.push("/home");
     } catch (error) {
@@ -76,7 +88,7 @@ const Create = () => {
 
           <TouchableOpacity onPress={() => openPicker("video")}>
             {inputForm.video ? (
-              <Video source={{ uri: inputForm.video.uri }} useNativeControls resizeMode={ResizeMode.COVER} isLooping className="bg-teal-500 w-full h-64 rounded-2xl" />
+              <Video source={{ uri: inputForm.video.uri }} resizeMode={ResizeMode.COVER} className="bg-teal-500 w-full h-64 rounded-2xl" />
             ) : (
               <View className="bg-black-100 w-full h-44 rounded-2xl px-4 items-center justify-center">
                 <View className="w-14 h-14 border border-dashed border-secondary-100 items-center justify-center">

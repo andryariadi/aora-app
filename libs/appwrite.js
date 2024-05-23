@@ -1,4 +1,4 @@
-import { Client, Account, ID, Avatars, Databases, Query } from "react-native-appwrite";
+import { Client, Account, ID, Avatars, Databases, Query, Storage } from "react-native-appwrite";
 
 export const appwriteConfig = {
   endpoint: "https://cloud.appwrite.io/v1",
@@ -21,6 +21,7 @@ client
 const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
+const storage = new Storage(client);
 
 export async function createUser(email, password, username) {
   try {
@@ -83,7 +84,7 @@ export const getCurrentUser = async () => {
 
 export const getAllPosts = async () => {
   try {
-    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.videoCollectionId);
+    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.videoCollectionId, [Query.orderDesc("$createdAt")]);
 
     return posts.documents;
   } catch (error) {
@@ -116,9 +117,81 @@ export const searchPosts = async (query) => {
 
 export const getUserPost = async (userId) => {
   try {
-    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.videoCollectionId, [Query.equal("creator", userId)]);
+    const posts = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.videoCollectionId, [Query.equal("creator", userId), Query.orderDesc("$createdAt")]);
 
     return posts.documents;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+export const getFilePriview = async (fileId, type) => {
+  let fileUrl;
+
+  try {
+    if (type === "video") {
+      fileUrl = storage.getFileView(appwriteConfig.storageId, fileId);
+    } else if (type === "image") {
+      fileUrl = storage.getFilePreview(appwriteConfig.storageId, fileId, 2000, 2000, "top", 100);
+    } else {
+      throw new Error("Invalid file type");
+    }
+
+    if (!fileUrl) throw Error;
+
+    return fileUrl;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+export const uploadFile = async (file, type) => {
+  4;
+  if (!file) return;
+
+  //if you used documentpicker
+  // const { mimeType, ...rest } = file;
+  // const asset = { type: mimeType, ...rest };
+
+  //if you used imagepicker
+  const asset = {
+    name: file.fileName,
+    type: file.mimeType,
+    size: file.fileSize,
+    uri: file.uri,
+  };
+
+  console.log(file, "<---diuploadfile1");
+
+  try {
+    const uploadedFile = await storage.createFile(appwriteConfig.storageId, ID.unique(), asset);
+
+    console.log(uploadedFile, "<---diuploadfile2");
+
+    const fileUrl = await getFilePriview(uploadedFile.$id, type);
+
+    return fileUrl;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+export const createVideo = async (form) => {
+  try {
+    const [thumnailUrl, videoUrl] = await Promise.all([uploadFile(form.thumnail, "image"), uploadFile(form.video, "video")]);
+
+    const newPost = await databases.createDocument(appwriteConfig.databaseId, appwriteConfig.videoCollectionId, ID.unique(), {
+      title: form.title,
+      thumnail: thumnailUrl,
+      video: videoUrl,
+      prompt: form.prompt,
+      creator: form.userId,
+    });
+
+    return newPost;
   } catch (error) {
     console.log(error);
     throw new Error(error);
