@@ -26,11 +26,11 @@ const TrendingItem = ({ item, activeItem }) => {
 
   // console.log(activeItem, item.$id, "<----ditrending");
   return (
-    <Animatable.View className="bg-teal-600 mr-5" animation={activeItem === item.$id ? zoomIn : zoomOut} duration={500}>
+    <Animatable.View className="mr-5" animation={activeItem === item.$id ? zoomIn : zoomOut} duration={500}>
       {play ? (
         <Video
           source={{ uri: item.video }}
-          className="bg-sky-700 w-52 h-72 rounded-[35px] mt-3 bg-white/10"
+          className="w-52 h-72 rounded-[35px] mt-3 bg-white/10"
           resizeMode={ResizeMode.CONTAIN}
           useNativeControls
           shouldPlay
@@ -41,7 +41,7 @@ const TrendingItem = ({ item, activeItem }) => {
           }}
         />
       ) : (
-        <TouchableOpacity className="bg-yellow-500 relative items-center justify-center" activeOpacity={0.7} onPress={() => setPlay(true)}>
+        <TouchableOpacity className="relative items-center justify-center" activeOpacity={0.7} onPress={() => setPlay(true)}>
           <ImageBackground source={{ uri: item.thumnail }} className="w-52 h-72 rounded-[35px] overflow-hidden my-5 shadow-lg shadow-black/40" resizeMode="cover" />
           <Image source={icons.play} className="w-12 h-12 absolute" resizeMode="contain" />
         </TouchableOpacity>

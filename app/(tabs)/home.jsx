@@ -33,9 +33,9 @@ const Home = () => {
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => <VideoCard video={item} />}
         ListHeaderComponent={() => (
-          <View className="bg-rose-500 my-6 px-4 space-y-6">
-            <View className="bg-gray-200 flex-row justify-between items-center mb-6">
-              <View className="bg-lime-500">
+          <View className="my-6 px-4 space-y-6">
+            <View className="flex-row justify-between items-center mb-6">
+              <View className="">
                 <Text className="font-pmedium text-sm text-gray-100">Welcome Back</Text>
                 <Text className="text-2xl text-white font-psemibold">{user?.username}</Text>
               </View>
@@ -47,7 +47,7 @@ const Home = () => {
 
             <SearchInput keyboardType="Search for a video topic" />
 
-            <View className="bg-indigo-700 flex-1 pt-5 pb-8">
+            <View className="flex-1 pt-5 pb-8">
               <Text className="text-gray-100 text-lg font-pregular mb-3">Latest Videos</Text>
 
               <TrendingVideo posts={latesPosts ?? []} />

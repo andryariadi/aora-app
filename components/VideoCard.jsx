@@ -14,14 +14,14 @@ const VideoCard = ({
   const [play, setPlay] = useState(false);
 
   return (
-    <View className="bg-teal-600 flex-col items-center px-4 mb-14">
-      <View className="bg-rose-500 flex-row items-center gap-3">
-        <View className="bg-sky-500 flex-row flex-1 items-center justify-center">
-          <View className="bg-lime-500 w-[46px] h-[46px] justify-center items-center rounded-lg border border-secondary p-0.5">
+    <View className="flex-col items-center px-4 mb-14">
+      <View className="flex-row items-center gap-3">
+        <View className="flex-row flex-1 items-center justify-center">
+          <View className="w-[46px] h-[46px] justify-center items-center rounded-lg border border-secondary p-0.5">
             <Image source={{ uri: avatar }} className="w-full h-full rounded-lg" resizeMode="cover" />
           </View>
 
-          <View className="bg-gray-500 flex-1 justify-center ml-3 gap-y-1">
+          <View className="flex-1 justify-center ml-3 gap-y-1">
             <Text className="text-white text-sm font-psemibold" numberOfLines={1}>
               {title}
             </Text>
@@ -31,7 +31,7 @@ const VideoCard = ({
           </View>
         </View>
 
-        <View className="bg-sky-500">
+        <View className="">
           <Image source={icons.menu} className="w-5 h-6" resizeMode="contain" />
         </View>
       </View>
@@ -39,7 +39,7 @@ const VideoCard = ({
       {play ? (
         <Video
           source={{ uri: video }}
-          className="bg-sky-700 w-full h-60 rounded-xl mt-3"
+          className="w-full h-60 rounded-xl mt-3"
           resizeMode={ResizeMode.CONTAIN}
           useNativeControls
           shouldPlay

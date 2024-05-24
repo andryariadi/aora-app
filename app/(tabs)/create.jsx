@@ -88,7 +88,7 @@ const Create = () => {
 
           <TouchableOpacity onPress={() => openPicker("video")}>
             {inputForm.video ? (
-              <Video source={{ uri: inputForm.video.uri }} resizeMode={ResizeMode.COVER} className="bg-teal-500 w-full h-64 rounded-2xl" />
+              <Video source={{ uri: inputForm.video.uri }} resizeMode={ResizeMode.COVER} className="w-full h-64 rounded-2xl" />
             ) : (
               <View className="bg-black-100 w-full h-44 rounded-2xl px-4 items-center justify-center">
                 <View className="w-14 h-14 border border-dashed border-secondary-100 items-center justify-center">
@@ -104,7 +104,7 @@ const Create = () => {
 
           <TouchableOpacity onPress={() => openPicker("image")}>
             {inputForm.thumnail ? (
-              <Image source={{ uri: inputForm.thumnail.uri }} resizeMode="cover" className="bg-amber-500 w-full h-64 rounded-2xl" />
+              <Image source={{ uri: inputForm.thumnail.uri }} resizeMode="cover" className="w-full h-64 rounded-2xl" />
             ) : (
               <View className="bg-black-100 w-full h-16 border-2 border-black-200 rounded-2xl px-4 flex-row items-center justify-center space-x-2">
                 <Image source={icons.upload} resizeMode="contain" className="w-5 h-5" />
